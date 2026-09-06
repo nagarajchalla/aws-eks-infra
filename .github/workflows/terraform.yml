@@ -20,7 +20,7 @@ jobs:
     name: Format & Validate
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: hashicorp/setup-terraform@v3
         with:
@@ -43,7 +43,7 @@ jobs:
     name: Checkov
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
@@ -68,7 +68,7 @@ jobs:
     name: tfsec
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Run tfsec
         uses: aquasecurity/tfsec-sarif-action@v0.1.4
