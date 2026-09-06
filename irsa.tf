@@ -81,9 +81,9 @@ resource "aws_iam_role_policy_attachment" "irsa" {
     for pair in flatten([
       for name, cfg in var.irsa_roles : [
         for arn in cfg.policy_arns : {
-          key      = "${name}:${arn}"
-          role     = name
-          policy   = arn
+          key    = "${name}:${arn}"
+          role   = name
+          policy = arn
         }
       ]
     ]) : pair.key => pair
