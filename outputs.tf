@@ -52,3 +52,23 @@ output "configure_kubectl" {
   description = "Command to write a kubeconfig entry for this cluster"
   value       = "aws eks update-kubeconfig --region ${var.region} --name ${aws_eks_cluster.this.name}"
 }
+
+output "oidc_provider_arn" {
+  description = "ARN of the IAM OIDC provider, needed when creating IRSA roles outside this module"
+  value       = aws_iam_openid_connect_provider.this.arn
+}
+
+output "oidc_provider_url" {
+  description = "OIDC issuer URL without the https:// prefix"
+  value       = local.oidc_provider
+}
+
+output "irsa_role_arns" {
+  description = "Map of IRSA role name to ARN. Annotate service accounts with these."
+  value       = { for k, v in aws_iam_role.irsa : k => v.arn }
+}
+
+output "node_security_group_id" {
+  description = "Security group attached to worker nodes"
+  value       = aws_security_group.node.id
+}

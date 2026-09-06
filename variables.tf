@@ -110,3 +110,22 @@ variable "node_disk_size" {
   type        = number
   default     = 50
 }
+
+variable "irsa_roles" {
+  description = <<-EOT
+    IAM roles bound to Kubernetes service accounts. Each entry creates a
+    role whose trust policy admits exactly one service account in one
+    namespace.
+
+    Annotate the service account with the role ARN for it to take effect:
+      eks.amazonaws.com/role-arn: <role_arn>
+  EOT
+
+  type = map(object({
+    namespace       = string
+    service_account = string
+    policy_arns     = list(string)
+  }))
+
+  default = {}
+}
