@@ -50,3 +50,63 @@ variable "single_nat_gateway" {
   type        = bool
   default     = false
 }
+
+variable "cluster_version" {
+  description = "Kubernetes minor version for the control plane. Check the EKS supported version calendar before bumping - versions leave standard support after roughly 14 months."
+  type        = string
+  default     = "1.32"
+}
+
+variable "public_access_cidrs" {
+  description = <<-EOT
+    CIDR blocks allowed to reach the public API endpoint. Defaults to
+    open, which is the single most common EKS misconfiguration - narrow
+    this to office and CI egress ranges, or set
+    cluster_endpoint_public_access = false and reach the API through a
+    bastion or VPN instead.
+  EOT
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
+variable "cluster_endpoint_public_access" {
+  description = "Expose the Kubernetes API on a public endpoint in addition to the private one. Private access is always enabled."
+  type        = bool
+  default     = true
+}
+
+variable "cluster_log_retention_days" {
+  description = "Retention for control plane logs. 90 days is a common compliance floor; CloudWatch charges by ingestion and storage, so indefinite retention gets expensive."
+  type        = number
+  default     = 90
+}
+
+variable "node_instance_types" {
+  description = "Instance types for the managed node group. Multiple types improve capacity availability, especially with SPOT."
+  type        = list(string)
+  default     = ["t3.large"]
+}
+
+variable "node_group_min_size" {
+  description = "Minimum nodes in the managed node group"
+  type        = number
+  default     = 2
+}
+
+variable "node_group_desired_size" {
+  description = "Initial node count. Ignored on subsequent applies so the cluster autoscaler can own it."
+  type        = number
+  default     = 2
+}
+
+variable "node_group_max_size" {
+  description = "Maximum nodes the group may scale to"
+  type        = number
+  default     = 6
+}
+
+variable "node_disk_size" {
+  description = "EBS volume size per node in GiB. Container images and ephemeral storage share this volume; 20 GiB fills quickly and triggers disk-pressure evictions."
+  type        = number
+  default     = 50
+}
